@@ -31,19 +31,34 @@ vector<int> parse_input(string file_path) {
 }
 
 int main() {
-    printf("hello world\n"); 
-
     vector<int> elf_calorie_counts = parse_input("input.txt");
+    vector<int> top_three;
 
-    int max = 0;
+    while (top_three.size() < 3) {
+        int max = 0;
+        int max_index = 0;
 
-    for (int i = 0; i < elf_calorie_counts.size(); i++) {
-        if (elf_calorie_counts[i] > max) {
-            max = elf_calorie_counts[i];
+        for (int i = 0; i < elf_calorie_counts.size(); i++) {
+            int value = elf_calorie_counts[i];
+
+            if (value > max) {
+                max = value;
+                max_index = i;
+            }
         }
+
+        elf_calorie_counts.erase(elf_calorie_counts.begin() + max_index);
+        top_three.push_back(max);
+
+        cout << top_three.size() << ": " << max << "\n";
     }
 
-    cout << "Highest amount of calories: " << max << "\n";
+    int final_count = 0;
+    for (int i = 0; i < top_three.size(); i++) {
+        final_count += top_three[i];
+    }
+
+    cout << "Top Three Total: " << final_count << "\n";
 
     return 0;
 }
