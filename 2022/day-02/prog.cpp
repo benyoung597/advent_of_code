@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+#include "../utils/input_parser.h"
+
 using namespace std;
 
 const int WIN = 6;
@@ -31,29 +33,6 @@ char choose_hand(char opponent_hand, char desired_outcome) {
 
     cout << "Should never be here" << "\n";
     return 'A';
-}
-
-vector<string> parse_input(string file_path) {
-    vector<string> rounds;
-
-    string line;
-    ifstream file (file_path);
-
-    if (file.is_open()) {
-        while (getline(file, line)) {
-            char opponent_hand = line.at(0);
-            char desired_outcome = line.at(2);
-
-            char outcome = choose_hand(opponent_hand, desired_outcome);
-
-            string updated_line = string(1, opponent_hand) + " " + string(1, outcome);
-            rounds.push_back(updated_line);
-        }
-
-        file.close();
-    }
-
-    return rounds;
 }
 
 int get_action_score(char action) {
@@ -96,7 +75,21 @@ int calculate_round_output(char a, char b) {
 }
 
 int main() {
-    vector<string> rounds = parse_input("input.txt");
+    vector<string> input = parse_input("day-02/input.txt");
+    vector<string> rounds;
+
+    for (int i = 0; i < input.size(); i++) {
+        string round = input[i];
+
+        char opponent_hand = round.at(0);
+        char desired_outcome = round.at(2);
+
+        char outcome = choose_hand(opponent_hand, desired_outcome);
+
+        string updated_line = string(1, opponent_hand) + " " + string(1, outcome);
+        rounds.push_back(updated_line);
+    }
+
     int total_score = 0;
 
     for (int i = 0; i < rounds.size(); i++) {
